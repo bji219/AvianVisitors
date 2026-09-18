@@ -13,6 +13,7 @@
 
 declare(strict_types=1);
 
+require_once __DIR__ . '/serve-media.php';
 require_once __DIR__ . '/educator-scope.php';
 require_once __DIR__ . '/admin-auth.php';
 
@@ -129,12 +130,7 @@ if ($file !== '') {
         echo 'recording not found';
         exit;
     }
-    $path = $candidates[0];
-    header('Content-Type: audio/mpeg');
-    header('Content-Length: ' . filesize($path));
-    header('Cache-Control: public, max-age=86400');
-    header('Accept-Ranges: bytes');
-    readfile($path);
+    avian_serve_file_with_ranges($candidates[0], 'audio/mpeg', 86400);
     exit;
 }
 // ---- Resolve scientific name -> common name (with underscores) ----
@@ -247,8 +243,4 @@ if ($path === null || !is_file($path) || filesize($path) < 64) {
 }
 
 // ---- Serve ----
-header('Content-Type: audio/mpeg');
-header('Content-Length: ' . filesize($path));
-header('Cache-Control: public, max-age=60');
-header('Accept-Ranges: bytes');
-readfile($path);
+avian_serve_file_with_ranges($path, 'audio/mpeg', 60);

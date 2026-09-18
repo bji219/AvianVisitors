@@ -13523,10 +13523,27 @@
   function recordingSources(row) {
     var sources = [];
     var file = row.dataset.file || '';
+    var rowScope = validEducatorScopeKey(row.dataset.edu) ? row.dataset.edu : '';
+    var detection = rowScope ? educatorDetectionId(row.dataset.detection) : null;
     if (file) {
-      var rowScope = validEducatorScopeKey(row.dataset.edu) ? row.dataset.edu : '';
-      var detection = rowScope ? educatorDetectionId(row.dataset.detection) : null;
       sources.push(mediaApiUrl('recording', { file: file, detection: detection }, rowScope));
+      return sources;
+    }
+    // No filename on the row: the detection exists in the database but carries
+    // no audio path. This used to return an empty list, so trySource(0) ran
+    // straight off the end and the row reported "unavailable" without ever
+    // making a request. recording.php also resolves ?sci= to that species'
+    // newest recording, which is the best available answer when the row names
+    // no file of its own.
+    //
+    // Deliberately NOT a fallback for a file that 404s: that file was purged by
+    // retention, and quietly substituting a different recording would play the
+    // wrong bird for the timestamp on screen. "Unavailable" is the honest
+    // answer there.
+    if (!rowScope) {
+      var sciEl = document.getElementById('modalSci');
+      var sci = sciEl ? (sciEl.textContent || '').trim() : '';
+      if (sci) sources.push(mediaApiUrl('recording', { sci: sci }, ''));
     }
     return sources;
   }
@@ -13570,6 +13587,7 @@
     audio.preload = 'metadata';
     audio.__sourceIndex = -1;
     audio.__sources = sources;
+    audio.__retries = {};
 
     function unavailable() {
       if (token !== modalAudioToken || audio !== modalAudio) return;
@@ -13601,6 +13619,15 @@
           if (error && error.name === 'NotAllowedError') {
             audioRelease(stopModalAudio);
             setModalPlayState(button, false);
+            return;
+          }
+          // One retry of the same URL before giving up on it. A transient 500
+          // or a dropped connection otherwise killed the row until the modal
+          // was reopened, because the list is short and every error advanced
+          // past a source. Replaying the same URL cannot yield wrong audio.
+          if (!audio.__retries[index]) {
+            audio.__retries[index] = 1;
+            trySource(index);
             return;
           }
           trySource(index + 1);
