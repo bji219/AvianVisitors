@@ -32,7 +32,25 @@ try:
 except ModuleNotFoundError:  # Python < 3.11
     import tomli as tomllib
 
-PANEL_W, PANEL_H = 1200, 1600  # portrait; the panel itself is 1600x1200
+PANEL_W, PANEL_H = 1200, 1600  # portrait; the 13.3" panel itself is 1600x1200
+
+# Portrait (w, h) for the Inky Impressions this renders on. push_panel()
+# transposes to the panel's landscape buffer. Composition has to know the size
+# before any hardware is touched -- --preview runs on a laptop with no panel --
+# so it comes from config rather than from the driver.
+PANEL_SIZES = {
+    "el133uf1": (1200, 1600),   # 13.3" Spectra 6, 1600x1200 landscape
+    "13.3": (1200, 1600),
+    "7.3": (480, 800),          # 7.3" Impression, 800x480 landscape
+}
+
+
+def resolve_panel_size(cfg):
+    """Explicit panel_w/panel_h win; then a known `panel` name; else the 13.3"."""
+    w, h = int(cfg.get("panel_w") or 0), int(cfg.get("panel_h") or 0)
+    if w > 0 and h > 0:
+        return w, h
+    return PANEL_SIZES.get(str(cfg.get("panel") or "").strip().lower(), (1200, 1600))
 
 # Approximate Spectra-6 inks, used only for --preview. On hardware the Inky
 # library maps to the panel's real palette.
@@ -58,7 +76,10 @@ DEFAULTS = {
     "opening": 0.7071,      # opening height as a panel fraction; 0.7071 preserves A5
     "rotate": 90,           # 90 or 270 if the frame hangs the other way up
     "saturation": 0.6,
-    "panel": "",            # "el133uf1" forces the 13.3" driver if auto() fails
+    "panel": "",            # "el133uf1" forces the 13.3" driver if auto() fails;
+                            # "7.3" / "13.3" only select geometry (auto() still drives)
+    "panel_w": 0,           # portrait panel size; 0/0 = derive from `panel`
+    "panel_h": 0,
     "quiet_start": 0, "quiet_end": 0,    # 0/0 = no quiet hours
     "heal_hours": 24,
     "state": "~/.birdframe/state.json",
@@ -448,6 +469,8 @@ def main():
     ap.add_argument("--force", action="store_true", help="refresh even if unchanged")
     ap.add_argument("--no-signature", action="store_true", help="skip change detection")
     ap.add_argument("--mat-box", action="store_true", help="dev: outline the mat window on the preview")
+    ap.add_argument("--panel-size", metavar="WxH",
+                    help="portrait panel size, e.g. 480x800 for the 7.3\" (default: from config)")
     args = ap.parse_args()
 
     cfg = load_config(args.config)
@@ -457,6 +480,19 @@ def main():
             cfg[key] = val
     if args.rotate is not None:
         cfg["rotate"] = args.rotate
+    if args.panel_size:
+        try:
+            w, h = (int(v) for v in args.panel_size.lower().split("x", 1))
+        except ValueError:
+            print(f"--panel-size must look like 480x800, not {args.panel_size!r}", file=sys.stderr)
+            return
+        if w <= 0 or h <= 0:
+            print("--panel-size dimensions must be positive", file=sys.stderr)
+            return
+        cfg["panel_w"], cfg["panel_h"] = w, h
+    # Composition reads these as module globals, so fix them before any render.
+    global PANEL_W, PANEL_H
+    PANEL_W, PANEL_H = resolve_panel_size(cfg)
     # One render at a time. A manual --force colliding with the timer's run
     # pushes two refreshes into the panel mid-cycle; on the 13.3" (two
     # half-panel controllers) that shows a split image and can wedge one
