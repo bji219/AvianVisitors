@@ -4,6 +4,7 @@ import time
 
 import librosa
 import numpy as np
+from scipy.signal import butter, sosfilt
 
 from .classes import Detection, ParseFileName
 from .helpers import get_settings, get_language
@@ -44,11 +45,35 @@ def splitSignal(sig, rate, overlap, seconds=3.0, minlen=1.5):
     return sig_splits
 
 
+def highpass(sig, rate):
+    """Attenuate sub-HIGHPASS_HZ rumble (traffic, wind) before inference.
+
+    A gentle 1-pole (6 dB/octave) roll-off. Measured on this install, 200 Hz
+    lifted the best bird score on a real clip from 0.187 to 0.248 while
+    dropping the competing "Engine" score from 0.074 to 0.055. Steeper
+    filters scored *worse* (2-pole 200 Hz: 0.237), so gentle is deliberate.
+
+    BirdNET normalises its input, so no make-up gain is needed or useful.
+    Applies to analysis only; the saved recordings keep their original audio.
+    HIGHPASS_HZ=0 (the default) disables this entirely.
+    """
+    try:
+        hz = get_settings().getfloat('HIGHPASS_HZ', fallback=0.0)
+    except Exception:
+        return sig
+    if not hz or hz <= 0 or hz >= rate / 2:
+        return sig
+    sos = butter(1, hz / (rate / 2.0), btype='high', output='sos')
+    return sosfilt(sos, sig).astype(np.float32)
+
+
 def readAudioData(path, overlap, sample_rate, chunk_duration):
     log.info('READING AUDIO DATA...')
 
     # Open file with librosa (uses ffmpeg or libav)
     sig, rate = librosa.load(path, sr=sample_rate, mono=True, res_type='kaiser_fast')
+
+    sig = highpass(sig, rate)
 
     # Split audio into chunks
     chunks = splitSignal(sig, rate, overlap, seconds=chunk_duration)
