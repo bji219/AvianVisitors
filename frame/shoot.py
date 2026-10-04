@@ -196,6 +196,9 @@ def shoot(url, out, *, title=None, subtitle=None, vw=600, vh=800, dsf=2,
             if user:
                 ctx_kw["http_credentials"] = {"username": user, "password": password or ""}
             page = browser.new_context(**ctx_kw).new_page()
+            # Covers calls without their own timeout, e.g. page.screenshot,
+            # whose 30s default is too short for a loaded Pi 3B.
+            page.set_default_timeout(timeout_ms)
             misses = []
             page.route("**/birdnet-api.php**", _make_api_handler(small_floor, window_hours, auth, species))
             page.route("**/apt.js*", _make_js_handler(
