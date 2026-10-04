@@ -74,6 +74,7 @@ DEFAULTS = {
     "bird_names": False,
     "mat": 0.0,             # extra global shrink of the content inside the A5 opening
     "opening": 0.7071,      # opening height as a panel fraction; 0.7071 preserves A5
+    "collage_frac": 0.66,   # collage width as a fraction of the opening
     "rotate": 90,           # 90 or 270 if the frame hangs the other way up
     "saturation": 0.6,
     "panel": "",            # "el133uf1" forces the 13.3" driver if auto() fails;
@@ -239,7 +240,7 @@ def _centroid_x(img, paper):
 TITLE_H_FRAC, COLLAGE_FRAC, GAP_FRAC = 0.065, 0.66, 0.1
 
 
-def mat_and_center(img, mat, opening):
+def mat_and_center(img, mat, opening, collage_frac=COLLAGE_FRAC):
     """Crop the title and collage, size each to a fraction of the opening,
     stack with a gap, and centre on the panel."""
     img = img.convert("RGB")
@@ -276,7 +277,7 @@ def mat_and_center(img, mat, opening):
     # title stays a consistent size whether the collage is tall or compact
     # instead of ballooning when the collage happens to be short.
     coll = img.crop(cb)
-    cs = min(box_w * COLLAGE_FRAC / coll.width, (box_h - title.height - gap) / coll.height)
+    cs = min(box_w * collage_frac / coll.width, (box_h - title.height - gap) / coll.height)
     collage = coll.resize((max(1, round(coll.width * cs)), max(1, round(coll.height * cs))), Image.LANCZOS)
     ccx = _centroid_x(collage, paper)  # centre the collage by ink weight, not bbox
     half = max(ccx, collage.width - ccx)
@@ -429,11 +430,13 @@ def run(cfg, preview=None, force=False, use_signature=True, mat_box=False):
         print("refresh:", "changed" if changed else "heal")
 
     try:
-        img = fit_panel(obtain_image(cfg, species))
+        img = obtain_image(cfg, species)
     except Exception as e:
         print(f"could not get image: {e}", file=sys.stderr)  # keep last panel image
         return
-    img = mat_and_center(img, cfg["mat"], cfg["opening"])
+    # Crop from the full-resolution shot: shrinking to the panel first and then
+    # resizing the collage again throws detail away before it is placed.
+    img = fit_panel(mat_and_center(img, cfg["mat"], cfg["opening"], cfg["collage_frac"]))
     if preview:
         out = quantize_spectra6(img)
         if mat_box:
