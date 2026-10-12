@@ -9194,8 +9194,6 @@
     document.getElementById('modalRarity').textContent = '-';
     document.getElementById('modalRarity').classList.remove('rare');
     document.getElementById('modalDesc').textContent = 'Loading description...';
-    var staleCall = document.querySelector('.postcard-about .about-call');
-    if (staleCall) staleCall.remove();
     document.getElementById('modalDesc').classList.add('placeholder');
     var previousDistinctive = document.querySelector('.postcard-about .about-distinctive');
     if (previousDistinctive) previousDistinctive.remove();
@@ -9319,62 +9317,36 @@
   function renderCallNotes(sci, contentRequest) {
     loadCalls().then(function (calls) {
       if (contentRequest !== POSTCARD_CONTENT_REQUEST) return;
-      var body = document.querySelector('.postcard-about .postcard-section-body');
-      if (!body) return;
-      var old = body.querySelector('.about-call');
+      var desc = document.getElementById('modalDesc');
+      if (!desc) return;
+      var old = desc.querySelector('.about-call');
       if (old) old.remove();
       var entry = calls && calls[sci];
-      var common = (entry && entry.common) ||
-        (document.getElementById('modalCommon').textContent || '').trim();
-
-      var box = document.createElement('div');
-      box.className = 'about-call';
-      if (entry && entry.mnemonics && entry.mnemonics.length) {
-        var line = document.createElement('p');
-        line.className = 'desc about-call-phrase';
-        var label = document.createElement('span');
-        label.className = 'about-call-label';
-        label.textContent = 'Sounds like ';
-        line.appendChild(label);
-        entry.mnemonics.forEach(function (phrase, i) {
-          if (i) line.appendChild(document.createTextNode(' or '));
-          var q = document.createElement('q');
-          q.textContent = phrase;
-          line.appendChild(q);
-        });
-        var credit = document.createElement('a');
-        credit.className = 'about-call-source';
-        credit.href = entry.url;
-        credit.target = '_blank';
-        credit.rel = 'noopener';
-        credit.textContent = 'Audubon';
-        line.appendChild(document.createTextNode(' \u00b7 '));
-        line.appendChild(credit);
-        box.appendChild(line);
-      }
-      var listen = document.createElement('p');
-      listen.className = 'desc about-call-listen';
-      listen.appendChild(document.createTextNode('Listen: '));
-      var links = [];
-      if (common && common !== sci) {
-        links.push(['All About Birds', 'https://www.allaboutbirds.org/guide/' +
-          encodeURIComponent(common.replace(/'/g, '').replace(/\s+/g, '_')) + '/sounds']);
-      }
-      links.push(['xeno-canto', 'https://xeno-canto.org/species/' +
-        encodeURIComponent(sci.replace(/\s+/g, '-'))]);
-      links.forEach(function (pair, i) {
-        if (i) listen.appendChild(document.createTextNode(' \u00b7 '));
-        var a = document.createElement('a');
-        a.href = pair[1];
-        a.target = '_blank';
-        a.rel = 'noopener';
-        a.textContent = pair[0];
-        listen.appendChild(a);
+      if (!entry || !entry.mnemonics || !entry.mnemonics.length) return;
+      // Its own paragraph, styled like the description above it.
+      var line = document.createElement('p');
+      line.className = 'about-call';
+      line.appendChild(document.createTextNode('Sounds like '));
+      entry.mnemonics.forEach(function (phrase, i) {
+        if (i) line.appendChild(document.createTextNode(' or '));
+        line.appendChild(document.createTextNode('\u201c' + phrase + '\u201d'));
       });
-      box.appendChild(listen);
-      body.appendChild(box);
+      line.appendChild(document.createTextNode(' ('));
+      var credit = document.createElement('a');
+      credit.href = entry.url;
+      credit.target = '_blank';
+      credit.rel = 'noopener';
+      credit.textContent = 'Audubon';
+      line.appendChild(credit);
+      line.appendChild(document.createTextNode(').'));
+      if (desc.classList.contains('placeholder')) {
+        desc.textContent = '';
+        desc.classList.remove('placeholder');
+      }
+      desc.appendChild(line);
     });
   }
+
 
   // Deep links and non-stamp surfaces still use the historical entry point.
   // Route them into the same postcard instead of maintaining a second detail
@@ -9528,16 +9500,6 @@
       block.textContent = paragraph;
       desc.appendChild(block);
     });
-    var distinctive = payload && typeof payload.distinctive === 'string'
-      ? payload.distinctive.replace(/\s+/g, ' ').trim()
-      : '';
-    var taxonomy = aboutBody && aboutBody.querySelector('.modal-meta');
-    if (distinctive && taxonomy) {
-      var fieldMarks = document.createElement('p');
-      fieldMarks.className = 'desc about-distinctive';
-      fieldMarks.textContent = distinctive;
-      taxonomy.insertAdjacentElement('afterend', fieldMarks);
-    }
     desc.classList.remove('placeholder');
   }
 

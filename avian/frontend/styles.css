@@ -2067,12 +2067,6 @@ body.postcard-open { overflow: hidden; }
   font-size: 11.5px;
   line-height: 1.42;
 }
-.postcard-about .about-call { flex: 0 0 auto; }
-.postcard-about .about-call .desc { margin-top: 0; font-size: 11.5px; line-height: 1.42; }
-.postcard-about .about-call-phrase { color: var(--card-ink); }
-.postcard-about .about-call-phrase q { font-style: italic; }
-.postcard-about .about-call-label,
-.postcard-about .about-call-listen { color: var(--card-muted); }
 .postcard-about .about-call a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 
 .postcard-recordings[open] {
