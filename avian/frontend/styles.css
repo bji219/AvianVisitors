@@ -2067,6 +2067,13 @@ body.postcard-open { overflow: hidden; }
   font-size: 11.5px;
   line-height: 1.42;
 }
+.postcard-about .about-call { flex: 0 0 auto; }
+.postcard-about .about-call .desc { margin-top: 0; font-size: 11.5px; line-height: 1.42; }
+.postcard-about .about-call-phrase { color: var(--card-ink); }
+.postcard-about .about-call-phrase q { font-style: italic; }
+.postcard-about .about-call-label,
+.postcard-about .about-call-listen { color: var(--card-muted); }
+.postcard-about .about-call a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 
 .postcard-recordings[open] {
   position: relative;
@@ -2423,6 +2430,26 @@ body.postcard-open { overflow: hidden; }
   .postcard-recordings { border-radius: 9px 9px 2px 2px; }
   .postcard-stamp-slot { min-height: 0; }
   .postcard-heading h2 { font-size: clamp(27px, 5vw, 36px); }
+}
+/* Phones: the species card scrolls as one page. Before, it was a fixed
+   full-height panel whose sections shared what was left under the picture,
+   so an opened recording's spectrogram sat hidden off the bottom. */
+@media (max-width: 860px) {
+  .postcard-sheet {
+    grid-template-rows: clamp(130px, calc(50dvh - 100px), 350px) auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+  }
+  .postcard-content { overflow: visible; }
+  .postcard-section[open],
+  .postcard-about[open],
+  .postcard-recordings[open] { flex: 0 0 auto; min-height: auto; }
+  .postcard-section::details-content,
+  .postcard-section[open]::details-content { overflow: visible; }
+  .postcard-recordings .postcard-section-body { height: auto; overflow: visible; }
+  .postcard-recordings ol { flex: 0 0 auto; overflow: visible; }
 }
 @media (max-width: 520px) {
   #postcard-modal { padding: 10px 8px 0; }

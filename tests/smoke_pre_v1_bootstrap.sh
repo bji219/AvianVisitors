@@ -62,7 +62,7 @@ set -euo pipefail
 touch /tmp/avian-pre-v1-bootstrap/caddy.called
 EOF
 for frontend_file in \
-  index.html styles.css apt.js masks.json dims.json nest.webp nest-eggs.webp \
+  index.html styles.css apt.js masks.json dims.json calls.json nest.webp nest-eggs.webp \
   stamps.css stamps.js stamp-batch-root.css stamp-batch-root.js \
   stamp-batch-a.css stamp-batch-a.js stamp-batch-b.css stamp-batch-b.js \
   stamp-batch-c.css stamp-batch-c.js grain.png stats-press.png; do

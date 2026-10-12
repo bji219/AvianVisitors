@@ -9194,6 +9194,8 @@
     document.getElementById('modalRarity').textContent = '-';
     document.getElementById('modalRarity').classList.remove('rare');
     document.getElementById('modalDesc').textContent = 'Loading description...';
+    var staleCall = document.querySelector('.postcard-about .about-call');
+    if (staleCall) staleCall.remove();
     document.getElementById('modalDesc').classList.add('placeholder');
     var previousDistinctive = document.querySelector('.postcard-about .about-distinctive');
     if (previousDistinctive) previousDistinctive.remove();
@@ -9287,6 +9289,7 @@
       if (contentRequest !== POSTCARD_CONTENT_REQUEST) return;
       var desc = document.getElementById('modalDesc');
       renderAboutDescription(desc, j);
+      renderCallNotes(sci, contentRequest);
       if (j.source && /^https:\/\/en\.wikipedia\.org\/wiki\//.test(j.source.url || '')) {
         document.getElementById('modalWiki').href = j.source.url;
       }
@@ -9295,8 +9298,82 @@
       var desc = document.getElementById('modalDesc');
       desc.textContent = 'No description available.';
       desc.classList.add('placeholder');
+      renderCallNotes(sci, contentRequest);
     });
     return imageReady;
+  }
+
+  // Call mnemonics (calls.json): only phrases a reputable guide prints
+  // word for word, credited and linked; avian/scripts/check_calls.py keeps
+  // them honest. Every species gets "Listen" links, mnemonic or not.
+  var CALLS_PROMISE = null;
+  function loadCalls() {
+    if (!CALLS_PROMISE) {
+      CALLS_PROMISE = fetch('./calls.json')
+        .then(function (r) { return r.ok ? r.json() : {}; })
+        .catch(function () { return {}; });
+    }
+    return CALLS_PROMISE;
+  }
+
+  function renderCallNotes(sci, contentRequest) {
+    loadCalls().then(function (calls) {
+      if (contentRequest !== POSTCARD_CONTENT_REQUEST) return;
+      var body = document.querySelector('.postcard-about .postcard-section-body');
+      if (!body) return;
+      var old = body.querySelector('.about-call');
+      if (old) old.remove();
+      var entry = calls && calls[sci];
+      var common = (entry && entry.common) ||
+        (document.getElementById('modalCommon').textContent || '').trim();
+
+      var box = document.createElement('div');
+      box.className = 'about-call';
+      if (entry && entry.mnemonics && entry.mnemonics.length) {
+        var line = document.createElement('p');
+        line.className = 'desc about-call-phrase';
+        var label = document.createElement('span');
+        label.className = 'about-call-label';
+        label.textContent = 'Sounds like ';
+        line.appendChild(label);
+        entry.mnemonics.forEach(function (phrase, i) {
+          if (i) line.appendChild(document.createTextNode(' or '));
+          var q = document.createElement('q');
+          q.textContent = phrase;
+          line.appendChild(q);
+        });
+        var credit = document.createElement('a');
+        credit.className = 'about-call-source';
+        credit.href = entry.url;
+        credit.target = '_blank';
+        credit.rel = 'noopener';
+        credit.textContent = 'Audubon';
+        line.appendChild(document.createTextNode(' \u00b7 '));
+        line.appendChild(credit);
+        box.appendChild(line);
+      }
+      var listen = document.createElement('p');
+      listen.className = 'desc about-call-listen';
+      listen.appendChild(document.createTextNode('Listen: '));
+      var links = [];
+      if (common && common !== sci) {
+        links.push(['All About Birds', 'https://www.allaboutbirds.org/guide/' +
+          encodeURIComponent(common.replace(/'/g, '').replace(/\s+/g, '_')) + '/sounds']);
+      }
+      links.push(['xeno-canto', 'https://xeno-canto.org/species/' +
+        encodeURIComponent(sci.replace(/\s+/g, '-'))]);
+      links.forEach(function (pair, i) {
+        if (i) listen.appendChild(document.createTextNode(' \u00b7 '));
+        var a = document.createElement('a');
+        a.href = pair[1];
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.textContent = pair[0];
+        listen.appendChild(a);
+      });
+      box.appendChild(listen);
+      body.appendChild(box);
+    });
   }
 
   // Deep links and non-stamp surfaces still use the historical entry point.
@@ -13515,6 +13592,15 @@
     if (expanded) {
       ensureSpectroImage(row);
       syncLoopRegion(row);
+      // On phones the whole card scrolls; bring the spectrogram into view
+      // once its 220 ms open transition has made room for it.
+      if (window.matchMedia && window.matchMedia('(max-width: 860px)').matches) {
+        setTimeout(function () {
+          if (row.classList.contains('expanded') && row.scrollIntoView) {
+            row.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          }
+        }, 240);
+      }
     } else if (modalRow() === row) {
       pauseModalAudio();
     }

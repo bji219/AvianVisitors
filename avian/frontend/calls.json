@@ -1,0 +1,554 @@
+{
+ "Empidonax virescens": {
+  "common": "Acadian Flycatcher",
+  "mnemonics": [
+   "peet-seet!"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/acadian-flycatcher"
+ },
+ "Empidonax alnorum": {
+  "common": "Alder Flycatcher",
+  "mnemonics": [
+   "fee-bee-o"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/alder-flycatcher"
+ },
+ "Corvus brachyrhynchos": {
+  "common": "American Crow",
+  "mnemonics": [
+   "caw-caw"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/american-crow"
+ },
+ "Spinus tristis": {
+  "common": "American Goldfinch",
+  "mnemonics": [
+   "per-chick-o-ree",
+   "potato-chips"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/american-goldfinch"
+ },
+ "Setophaga ruticilla": {
+  "common": "American Redstart",
+  "mnemonics": [
+   "chewy-chewy-chewy"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/american-redstart"
+ },
+ "Turdus migratorius": {
+  "common": "American Robin",
+  "mnemonics": [
+   "cheer-up, cheerily, cheer-up, cheerily"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/american-robin"
+ },
+ "Scolopax minor": {
+  "common": "American Woodcock",
+  "mnemonics": [
+   "bzeep!"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/american-woodcock"
+ },
+ "Coccyzus erythropthalmus": {
+  "common": "Black-billed Cuckoo",
+  "mnemonics": [
+   "cu-cu-cu-cu"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/black-billed-cuckoo"
+ },
+ "Poecile atricapillus": {
+  "common": "Black-capped Chickadee",
+  "mnemonics": [
+   "chick-a-dee-dee-dee",
+   "fee-bee"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/black-capped-chickadee"
+ },
+ "Setophaga caerulescens": {
+  "common": "Black-throated Blue Warbler",
+  "mnemonics": [
+   "zwee-zwee-zwee"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/black-throated-blue-warbler"
+ },
+ "Setophaga virens": {
+  "common": "Black-throated Green Warbler",
+  "mnemonics": [
+   "zee-zee-zee-zoo-zee"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/black-throated-green-warbler"
+ },
+ "Cyanocitta cristata": {
+  "common": "Blue Jay",
+  "mnemonics": [
+   "jay-jay",
+   "queedle-queedle"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/blue-jay"
+ },
+ "Buteo platypterus": {
+  "common": "Broad-winged Hawk",
+  "mnemonics": [
+   "pe-heeeeeeeee?"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/broad-winged-hawk"
+ },
+ "Poecile carolinensis": {
+  "common": "Carolina Chickadee",
+  "mnemonics": [
+   "chickadee-dee-dee-dee",
+   "see-dee, see-dee"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/carolina-chickadee"
+ },
+ "Thryothorus ludovicianus": {
+  "common": "Carolina Wren",
+  "mnemonics": [
+   "tea-kettle, tea-kettle, tea-kettle tea"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/carolina-wren"
+ },
+ "Setophaga pensylvanica": {
+  "common": "Chestnut-sided Warbler",
+  "mnemonics": [
+   "very very pleased to meet cha!"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/chestnut-sided-warbler"
+ },
+ "Chordeiles minor": {
+  "common": "Common Nighthawk",
+  "mnemonics": [
+   "peent"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/common-nighthawk"
+ },
+ "Corvus corax": {
+  "common": "Common Raven",
+  "mnemonics": [
+   "wonk-wonk"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/common-raven"
+ },
+ "Geothlypis trichas": {
+  "common": "Common Yellowthroat",
+  "mnemonics": [
+   "witchity-witchity-witchity",
+   "which-is-it, which-is-it, which-is-it"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/common-yellowthroat"
+ },
+ "Accipiter cooperii": {
+  "common": "Cooper's Hawk",
+  "mnemonics": [
+   "cack-cack-cack-cack"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/coopers-hawk"
+ },
+ "Sialia sialis": {
+  "common": "Eastern Bluebird",
+  "mnemonics": [
+   "turee"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/eastern-bluebird"
+ },
+ "Sturnella magna": {
+  "common": "Eastern Meadowlark",
+  "mnemonics": [
+   "see-you, see-yeeeer"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/eastern-meadowlark"
+ },
+ "Sayornis phoebe": {
+  "common": "Eastern Phoebe",
+  "mnemonics": [
+   "phoe-be"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/eastern-phoebe"
+ },
+ "Pipilo erythrophthalmus": {
+  "common": "Eastern Towhee",
+  "mnemonics": [
+   "drink-your-teeaaa"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/eastern-towhee"
+ },
+ "Antrostomus vociferus": {
+  "common": "Eastern Whip-poor-will",
+  "mnemonics": [
+   "whip-poor-will"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/eastern-whip-poor-will"
+ },
+ "Contopus virens": {
+  "common": "Eastern Wood-Pewee",
+  "mnemonics": [
+   "pee-ah-weee"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/eastern-wood-pewee"
+ },
+ "Corvus ossifragus": {
+  "common": "Fish Crow",
+  "mnemonics": [
+   "ah-ah"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/fish-crow"
+ },
+ "Regulus satrapa": {
+  "common": "Golden-crowned Kinglet",
+  "mnemonics": [
+   "ti-ti-ti"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/golden-crowned-kinglet"
+ },
+ "Ammodramus savannarum": {
+  "common": "Grasshopper Sparrow",
+  "mnemonics": [
+   "kip-kip-kip, zeeee"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/grasshopper-sparrow"
+ },
+ "Myiarchus crinitus": {
+  "common": "Great Crested Flycatcher",
+  "mnemonics": [
+   "wheep"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/great-crested-flycatcher"
+ },
+ "Bubo virginianus": {
+  "common": "Great Horned Owl",
+  "mnemonics": [
+   "hoo, hoo-hoo, hoo, hoo"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/great-horned-owl"
+ },
+ "Butorides virescens": {
+  "common": "Green Heron",
+  "mnemonics": [
+   "skyow!"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/green-heron"
+ },
+ "Larus argentatus": {
+  "common": "Herring Gull",
+  "mnemonics": [
+   "yucca-yucca-yucca"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/american-herring-gull"
+ },
+ "Setophaga citrina": {
+  "common": "Hooded Warbler",
+  "mnemonics": [
+   "tawee-tawee-tawee-tee-o"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/hooded-warbler"
+ },
+ "Geothlypis formosa": {
+  "common": "Kentucky Warbler",
+  "mnemonics": [
+   "tur-dle, tur-dle, tur-dle"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/kentucky-warbler"
+ },
+ "Charadrius vociferus": {
+  "common": "Killdeer",
+  "mnemonics": [
+   "kill-deee"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/killdeer"
+ },
+ "Empidonax minimus": {
+  "common": "Least Flycatcher",
+  "mnemonics": [
+   "che-bec"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/least-flycatcher"
+ },
+ "Setophaga magnolia": {
+  "common": "Magnolia Warbler",
+  "mnemonics": [
+   "Weeta-weeta-weeteo"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/magnolia-warbler"
+ },
+ "Anas platyrhynchos": {
+  "common": "Mallard",
+  "mnemonics": [
+   "quack"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/mallard"
+ },
+ "Zenaida macroura": {
+  "common": "Mourning Dove",
+  "mnemonics": [
+   "coo-ah, coo, coo, coo"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/mourning-dove"
+ },
+ "Geothlypis philadelphia": {
+  "common": "Mourning Warbler",
+  "mnemonics": [
+   "teedle-teedle, turtle-turtle"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/mourning-warbler"
+ },
+ "Cardinalis cardinalis": {
+  "common": "Northern Cardinal",
+  "mnemonics": [
+   "what-cheer, cheer, cheer",
+   "purty-purty-purty-purty"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/northern-cardinal"
+ },
+ "Colaptes auratus": {
+  "common": "Northern Flicker",
+  "mnemonics": [
+   "wicka-wicka-wicka"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/northern-flicker"
+ },
+ "Parkesia noveboracensis": {
+  "common": "Northern Waterthrush",
+  "mnemonics": [
+   "chee-chee-chee, chip-chip-chip-chew-chew-chew"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/northern-waterthrush"
+ },
+ "Contopus cooperi": {
+  "common": "Olive-sided Flycatcher",
+  "mnemonics": [
+   "quick-three-beers"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/olive-sided-flycatcher"
+ },
+ "Seiurus aurocapilla": {
+  "common": "Ovenbird",
+  "mnemonics": [
+   "teacher, teacher, teacher"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/ovenbird"
+ },
+ "Dryocopus pileatus": {
+  "common": "Pileated Woodpecker",
+  "mnemonics": [
+   "cuk-cuk-cuk-cuk-cuk"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/pileated-woodpecker"
+ },
+ "Spinus pinus": {
+  "common": "Pine Siskin",
+  "mnemonics": [
+   "bzzzzzt"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/pine-siskin"
+ },
+ "Setophaga discolor": {
+  "common": "Prairie Warbler",
+  "mnemonics": [
+   "zee-zee-zee"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/prairie-warbler"
+ },
+ "Melanerpes carolinus": {
+  "common": "Red-bellied Woodpecker",
+  "mnemonics": [
+   "churrrr"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/red-bellied-woodpecker"
+ },
+ "Sitta canadensis": {
+  "common": "Red-breasted Nuthatch",
+  "mnemonics": [
+   "yank-yank"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/red-breasted-nuthatch"
+ },
+ "Melanerpes erythrocephalus": {
+  "common": "Red-headed Woodpecker",
+  "mnemonics": [
+   "churr-churr",
+   "yarrow-yarrow-yarrow"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/red-headed-woodpecker"
+ },
+ "Buteo lineatus": {
+  "common": "Red-shouldered Hawk",
+  "mnemonics": [
+   "kee-yeeear"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/red-shouldered-hawk"
+ },
+ "Buteo jamaicensis": {
+  "common": "Red-tailed Hawk",
+  "mnemonics": [
+   "keeeeer"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/red-tailed-hawk"
+ },
+ "Agelaius phoeniceus": {
+  "common": "Red-winged Blackbird",
+  "mnemonics": [
+   "o-ka-leeee!"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/red-winged-blackbird"
+ },
+ "Pheucticus ludovicianus": {
+  "common": "Rose-breasted Grosbeak",
+  "mnemonics": [
+   "eek-eek"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/rose-breasted-grosbeak"
+ },
+ "Passerculus sandwichensis": {
+  "common": "Savannah Sparrow",
+  "mnemonics": [
+   "tsip-tsip-tsip-se-e-e-srr"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/savannah-sparrow"
+ },
+ "Piranga olivacea": {
+  "common": "Scarlet Tanager",
+  "mnemonics": [
+   "chip-bang"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/scarlet-tanager"
+ },
+ "Melospiza melodia": {
+  "common": "Song Sparrow",
+  "mnemonics": [
+   "Madge-Madge-Madge, put-on-your-tea-kettle-ettle-ettle"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/song-sparrow"
+ },
+ "Piranga rubra": {
+  "common": "Summer Tanager",
+  "mnemonics": [
+   "chick-tucky-tuck"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/summer-tanager"
+ },
+ "Baeolophus bicolor": {
+  "common": "Tufted Titmouse",
+  "mnemonics": [
+   "Peter-Peter"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/tufted-titmouse"
+ },
+ "Sitta carolinensis": {
+  "common": "White-breasted Nuthatch",
+  "mnemonics": [
+   "yank-yank"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/white-breasted-nuthatch"
+ },
+ "Vireo griseus": {
+  "common": "White-eyed Vireo",
+  "mnemonics": [
+   "Quick, give me a rain check!"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/white-eyed-vireo"
+ },
+ "Zonotrichia albicollis": {
+  "common": "White-throated Sparrow",
+  "mnemonics": [
+   "Poor Sam Peabody, Peabody, Peabody",
+   "Sweet Sweet Canada, Canada, Canada"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/white-throated-sparrow"
+ },
+ "Empidonax traillii": {
+  "common": "Willow Flycatcher",
+  "mnemonics": [
+   "fitz-bew"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/willow-flycatcher"
+ },
+ "Aix sponsa": {
+  "common": "Wood Duck",
+  "mnemonics": [
+   "wooo-eeek!"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/wood-duck"
+ },
+ "Setophaga petechia": {
+  "common": "Yellow Warbler",
+  "mnemonics": [
+   "sweet-sweet-sweet, sweeter-than-sweet"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/northern-yellow-warbler"
+ },
+ "Coccyzus americanus": {
+  "common": "Yellow-billed Cuckoo",
+  "mnemonics": [
+   "ka-ka-ka-ka-ka-ka-kow-kow-kowp"
+  ],
+  "source": "Audubon Guide to North American Birds",
+  "url": "https://www.audubon.org/field-guide/bird/yellow-billed-cuckoo"
+ }
+}

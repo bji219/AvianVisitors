@@ -198,6 +198,7 @@ assert_avian_runtime_links() {
   assert_link "$extracted/apt.js" "$repo/avian/frontend/apt.js"
   assert_link "$extracted/masks.json" "$repo/avian/frontend/masks.json"
   assert_link "$extracted/dims.json" "$repo/avian/frontend/dims.json"
+  assert_link "$extracted/calls.json" "$repo/avian/frontend/calls.json"
   assert_link "$extracted/nest.webp" "$repo/avian/frontend/nest.webp"
   assert_link "$extracted/nest-eggs.webp" "$repo/avian/frontend/nest-eggs.webp"
   assert_link "$extracted/stamps.css" "$repo/avian/frontend/stamps.css"
