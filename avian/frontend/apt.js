@@ -9326,7 +9326,7 @@
       // Its own paragraph, styled like the description above it.
       var line = document.createElement('p');
       line.className = 'about-call';
-      line.appendChild(document.createTextNode('Sounds like '));
+      line.appendChild(document.createTextNode('Sounds like: '));
       entry.mnemonics.forEach(function (phrase, i) {
         if (i) line.appendChild(document.createTextNode(' or '));
         line.appendChild(document.createTextNode('\u201c' + phrase + '\u201d'));
