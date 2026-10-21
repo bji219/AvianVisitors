@@ -32,7 +32,7 @@ try:
 except ModuleNotFoundError:  # Python < 3.11
     import tomli as tomllib
 
-PANEL_W, PANEL_H = 1200, 1600  # portrait; the 13.3" panel itself is 1600x1200
+PANEL_W, PANEL_H = 480, 800  # portrait; the 7.3" Inky Frame panel itself is 800x480
 
 # Portrait (w, h) for the Inky Impressions this renders on. push_panel()
 # transposes to the panel's landscape buffer. Composition has to know the size
@@ -46,11 +46,11 @@ PANEL_SIZES = {
 
 
 def resolve_panel_size(cfg):
-    """Explicit panel_w/panel_h win; then a known `panel` name; else the 13.3"."""
+    """Explicit panel_w/panel_h win; then a known `panel` name; else the 7.3"."""
     w, h = int(cfg.get("panel_w") or 0), int(cfg.get("panel_h") or 0)
     if w > 0 and h > 0:
         return w, h
-    return PANEL_SIZES.get(str(cfg.get("panel") or "").strip().lower(), (1200, 1600))
+    return PANEL_SIZES.get(str(cfg.get("panel") or "").strip().lower(), (480, 800))
 
 # Approximate Spectra-6 inks, used only for --preview. On hardware the Inky
 # library maps to the panel's real palette.
@@ -73,8 +73,8 @@ DEFAULTS = {
     "shoot_mat": 0.04, "shoot_small_floor": 0.04, "shoot_count_exp": 0.65,
     "bird_names": False,
     "mat": 0.0,             # extra global shrink of the content inside the A5 opening
-    "opening": 0.7071,      # opening height as a panel fraction; 0.7071 preserves A5
-    "collage_frac": 0.66,   # collage width as a fraction of the opening
+    "opening": 1.0,         # opening height as a panel fraction; 1.0 = the whole 7.3" screen
+    "collage_frac": 0.9,    # collage width as a fraction of the opening (upstream 0.66)
     "rotate": 90,           # 90 or 270 if the frame hangs the other way up
     "saturation": 0.6,
     "panel": "",            # "el133uf1" forces the 13.3" driver if auto() fails;
@@ -186,6 +186,8 @@ def _paper(img):
 
 # The opening is a 1:sqrt(2) rectangle centred in the panel. `opening` sets
 # how much of the panel height it covers; 0.7071 preserves the A5 default.
+# The width never exceeds the panel's, so on a panel narrower than 1:sqrt(2)
+# (the 7.3", 3:5) opening = 1 is the whole screen, edge to edge.
 def opening_size(opening):
     if isinstance(opening, bool):
         raise ValueError("opening must be greater than 0 and at most 1")
@@ -196,7 +198,7 @@ def opening_size(opening):
     if not 0 < opening <= 1:
         raise ValueError("opening must be greater than 0 and at most 1")
     h = PANEL_H * opening
-    return h / 1.41421, h
+    return min(h / 1.41421, PANEL_W), h
 
 
 def _place(content, paper, mat, opening):

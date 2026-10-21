@@ -29,9 +29,11 @@ class PanelSizeTests(unittest.TestCase):
     def setUpClass(cls):
         cls.display = load_module("frame_display", FRAME / "display.py")
 
-    def test_default_is_the_13_3_inch_panel(self):
-        """An existing install with no new keys must not change behaviour."""
-        self.assertEqual(self.display.resolve_panel_size({}), (1200, 1600))
+    def test_default_is_the_7_3_inch_frame(self):
+        """This fork drives a 7.3" Inky Frame; the 13.3" is opt-in by name."""
+        self.assertEqual(self.display.resolve_panel_size({}), (480, 800))
+        self.assertEqual((self.display.PANEL_W, self.display.PANEL_H), (480, 800))
+        self.assertEqual(self.display.DEFAULTS["opening"], 1.0)
         self.assertEqual(
             self.display.resolve_panel_size({"panel": "el133uf1"}), (1200, 1600)
         )
@@ -48,21 +50,39 @@ class PanelSizeTests(unittest.TestCase):
         )
 
     def test_unknown_panel_falls_back_rather_than_raising(self):
-        self.assertEqual(self.display.resolve_panel_size({"panel": "nonesuch"}), (1200, 1600))
-        self.assertEqual(self.display.resolve_panel_size({"panel_w": 0, "panel_h": 0}), (1200, 1600))
+        self.assertEqual(self.display.resolve_panel_size({"panel": "nonesuch"}), (480, 800))
+        self.assertEqual(self.display.resolve_panel_size({"panel_w": 0, "panel_h": 0}), (480, 800))
 
-    def test_opening_cannot_overflow_the_7_3_inch_width(self):
-        """The opening is a fixed 1:sqrt(2) box scaled off panel height, so on a
-        5:3 panel the width binds first. 0.848 is the cap; the 13.3"'s 0.98 is
-        not transferable."""
+    def test_opening_never_overflows_the_panel_width(self):
+        """The opening is a 1:sqrt(2) box scaled off panel height. On a 3:5
+        panel its width would pass the edge above 0.848, so it is capped there,
+        and opening = 1 is the whole screen."""
         self.display.PANEL_W, self.display.PANEL_H = 480, 800
         try:
-            w, _ = self.display.opening_size(0.848)
-            self.assertLessEqual(w, 480)
-            w, _ = self.display.opening_size(0.86)
-            self.assertGreater(w, 480, "0.86 should overflow; the cap claim is wrong")
+            w, h = self.display.opening_size(0.84)
+            self.assertAlmostEqual(w, 0.84 * 800 / 1.41421, places=3)
+            self.assertEqual(self.display.opening_size(1.0), (480, 800))
+            self.assertEqual(self.display.opening_size(0.9)[0], 480)
         finally:
-            self.display.PANEL_W, self.display.PANEL_H = 1200, 1600
+            self.display.PANEL_W, self.display.PANEL_H = 480, 800
+
+    def test_opening_on_the_13_3_inch_keeps_its_a5_shape(self):
+        self.display.PANEL_W, self.display.PANEL_H = 1200, 1600
+        try:
+            w, h = self.display.opening_size(0.7071)
+            self.assertAlmostEqual(w / h, 1 / 1.41421, places=4)
+        finally:
+            self.display.PANEL_W, self.display.PANEL_H = 480, 800
+
+    def test_full_opening_places_content_edge_to_edge(self):
+        self.display.PANEL_W, self.display.PANEL_H = 480, 800
+        try:
+            placed = self.display._place(Image.new("RGB", (480, 800), (0, 0, 0)),
+                                         (255, 255, 255), 0.0, 1.0)
+            self.assertEqual(placed.size, (480, 800))
+            self.assertEqual(placed.getcolors(), [(480 * 800, (0, 0, 0))])
+        finally:
+            self.display.PANEL_W, self.display.PANEL_H = 480, 800
 
     def test_composing_at_panel_size_needs_no_rescale(self):
         """push_panel() only resizes when the rotated buffer misses the device.
