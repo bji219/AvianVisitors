@@ -265,7 +265,11 @@ def shoot(url, out, *, title=None, subtitle=None, vw=600, vh=800, dsf=2,
                 raise RuntimeError(f"apt.js tunables not found ({len(misses)}); refusing to ship a half-tuned frame")
 
             if title is not None:
-                page.evaluate("t=>{const e=document.querySelector('.static-head .pre'); if(e)e.textContent=t;}", title)
+                # An empty title drops the eyebrow line altogether: on a small
+                # panel it is too small to read.
+                page.evaluate("t=>{const e=document.querySelector('.static-head .pre'); if(!e)return;"
+                              " if(t){e.textContent=t;}else{e.style.setProperty('display','none','important');}}",
+                              title)
             if subtitle is not None:
                 page.evaluate("s=>{const e=document.querySelector('.static-head h1'); if(e)e.textContent=s;}", subtitle)
             # Set the empty-state line for a birdless frame (the mic hasn't heard
