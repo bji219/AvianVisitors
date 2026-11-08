@@ -230,9 +230,17 @@ def shoot(url, out, *, title=None, subtitle=None, vw=600, vh=800, dsf=2,
                 "var s=document.createElement('style');s.textContent=" + json.dumps(css) +
                 ";document.head.appendChild(s);});")
 
-            resp = page.goto(_frame_url(url, bird_names), wait_until="domcontentloaded", timeout=timeout_ms)
-            if resp is None or not resp.ok:
-                raise RuntimeError(f"site returned {resp.status if resp else 'no response'}")
+            # The page shows its empty state while the bird list is loading, so
+            # waiting for "a tile or the empty state" alone captures an empty
+            # nest whenever the recent query is slow (a busy station's is ~2 s).
+            # Wait for the list itself first; then .empty really means no birds.
+            with page.expect_response(lambda r: "action=recent" in r.url,
+                                      timeout=timeout_ms) as recent:
+                resp = page.goto(_frame_url(url, bird_names), wait_until="domcontentloaded",
+                                 timeout=timeout_ms)
+                if resp is None or not resp.ok:
+                    raise RuntimeError(f"site returned {resp.status if resp else 'no response'}")
+            recent.value  # noqa: B018 (raises if it never came)
             if bird_names:
                 font_loaded = page.evaluate(
                     "async () => { const f = await document.fonts.load('600 16px Hand');"
