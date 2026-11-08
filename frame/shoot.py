@@ -88,12 +88,23 @@ def _frame_url(url, bird_names):
     return urllib.parse.urlunsplit(parts._replace(query=urllib.parse.urlencode(query)))
 
 
-def _make_api_handler(floor_frac, window_hours, auth, species=None, max_species=0, rarity=None):
+def _wait_for_collage(page, species_count, timeout_ms):
+    """Wait until the page has drawn the list it was given. The empty state is
+    on screen while the list loads and, on a slow Pi, for a moment after it
+    arrives, so it only counts when the list really was empty. An unknown count
+    (the list could not be rewritten) accepts either, as before."""
+    selector = ".gtile" if species_count else ".gtile, .empty"
+    page.wait_for_selector(selector, state="attached", timeout=timeout_ms)
+
+
+def _make_api_handler(floor_frac, window_hours, auth, species=None, max_species=0, rarity=None,
+                      seen=None):
     """Re-window action=recent (to preview busy days) and floor the rarest
     counts so the packer draws them a little larger. With `species` set
     (--bird-weather), serve that list for recent and an empty body for the
     other views, which have no backend in that mode. With max_species set,
-    keep only that many birds, one of them the rarest visitor (species_cap)."""
+    keep only that many birds, one of them the rarest visitor (species_cap).
+    `seen`, if given, gets "species": how many birds the page was sent."""
     def handler(route):
         req = route.request
         if "action=recent" not in req.url:
@@ -112,6 +123,8 @@ def _make_api_handler(floor_frac, window_hours, auth, species=None, max_species=
             sp = data.get("species", [])
             sp, rare = cap_species(sp, max_species, rarity or {})
             data["species"] = sp
+            if seen is not None:
+                seen["species"] = len(sp)
             if rare is not None:
                 print(f"rare slot: {rare.get('com') or rare.get('sci')}", file=sys.stderr)
             if sp and floor_frac > 0:
@@ -209,8 +222,9 @@ def shoot(url, out, *, title=None, subtitle=None, vw=600, vh=800, dsf=2,
             # whose 30s default is too short for a loaded Pi 3B.
             page.set_default_timeout(timeout_ms)
             misses = []
+            seen = {}
             page.route("**/birdnet-api.php**", _make_api_handler(small_floor, window_hours, auth, species,
-                                                                   max_species, rarity))
+                                                                   max_species, rarity, seen))
             page.route("**/apt.js*", _make_js_handler(
                 cluster_xbias, cluster_ybias, count_exp, cluster_pad,
                 label_min_px, auth, misses))
@@ -252,7 +266,7 @@ def shoot(url, out, *, title=None, subtitle=None, vw=600, vh=800, dsf=2,
             # when the mic has heard nothing yet, so a birdless frame renders a
             # clean title card fast instead of hanging until the timeout. A page
             # with neither still times out here and stays fatal (keep last frame).
-            page.wait_for_selector(".gtile, .empty", state="attached", timeout=timeout_ms)
+            _wait_for_collage(page, seen.get("species"), timeout_ms)
             if page.query_selector(".gtile") is not None:
                 try:
                     page.wait_for_function(

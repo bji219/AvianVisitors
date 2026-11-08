@@ -105,5 +105,41 @@ class ShootWaitsForBirdsTests(unittest.TestCase):
         self.assertNotEqual(with_birds, empty)
 
 
+
+class FakePage:
+    def __init__(self):
+        self.selectors = []
+
+    def wait_for_selector(self, selector, state=None, timeout=None):
+        self.selectors.append(selector)
+
+
+class WaitForCollageTests(unittest.TestCase):
+    """Which element counts as "drawn" depends on the list the page got: the
+    empty state is on screen while the list loads, and a slow Pi can still
+    show it for a moment after the list has arrived."""
+
+    @classmethod
+    def setUpClass(cls):
+        try:
+            cls.shoot = load_module("frame_shoot_wait", FRAME / "shoot.py")
+        except ImportError:
+            raise unittest.SkipTest("playwright not installed")
+
+    def selector_for(self, count):
+        page = FakePage()
+        self.shoot._wait_for_collage(page, count, 1000)
+        return page.selectors
+
+    def test_a_list_with_birds_waits_for_a_tile(self):
+        self.assertEqual(self.selector_for(3), [".gtile"])
+
+    def test_an_empty_list_accepts_the_empty_state(self):
+        self.assertEqual(self.selector_for(0), [".gtile, .empty"])
+
+    def test_an_unknown_list_accepts_either(self):
+        self.assertEqual(self.selector_for(None), [".gtile, .empty"])
+
+
 if __name__ == "__main__":
     unittest.main()
