@@ -31,6 +31,9 @@ import urllib.parse
 from playwright.sync_api import TimeoutError as PWTimeout
 from playwright.sync_api import sync_playwright
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from species_cap import cap_species  # noqa: E402  (beside this file, no deps)
+
 # --bird-weather resolves cutouts from the local clone first, then falls back to
 # the repo's raw GitHub URLs: a fresh install needs no illustration redeploy,
 # upstream additions arrive with a git pull, and cutouts you generate and copy
@@ -85,11 +88,12 @@ def _frame_url(url, bird_names):
     return urllib.parse.urlunsplit(parts._replace(query=urllib.parse.urlencode(query)))
 
 
-def _make_api_handler(floor_frac, window_hours, auth, species=None):
+def _make_api_handler(floor_frac, window_hours, auth, species=None, max_species=0, rarity=None):
     """Re-window action=recent (to preview busy days) and floor the rarest
     counts so the packer draws them a little larger. With `species` set
     (--bird-weather), serve that list for recent and an empty body for the
-    other views, which have no backend in that mode."""
+    other views, which have no backend in that mode. With max_species set,
+    keep only that many birds, one of them the rarest visitor (species_cap)."""
     def handler(route):
         req = route.request
         if "action=recent" not in req.url:
@@ -106,6 +110,10 @@ def _make_api_handler(floor_frac, window_hours, auth, species=None):
                     kw["headers"] = {**req.headers, "authorization": auth}
                 data = route.fetch(**kw).json()
             sp = data.get("species", [])
+            sp, rare = cap_species(sp, max_species, rarity or {})
+            data["species"] = sp
+            if rare is not None:
+                print(f"rare slot: {rare.get('com') or rare.get('sci')}", file=sys.stderr)
             if sp and floor_frac > 0:
                 floor = max((s.get("n") or 1) for s in sp) * floor_frac
                 for s in sp:
@@ -181,7 +189,8 @@ def shoot(url, out, *, title=None, subtitle=None, vw=600, vh=800, dsf=2,
           mat=0.04, collage_vh=52, cluster_xbias=1.0, cluster_ybias=1.2,
           count_exp=0.4, cluster_pad=1, label_min_px=11, small_floor=0.04, window_hours=None,
           timeout_ms=45000, user=None, password=None, species=None, cutout_base=None,
-          cutout_local=None, empty_text="listening for birds…", bird_names=False):
+          cutout_local=None, empty_text="listening for birds…", bird_names=False,
+          max_species=0, rarity=None):
     pad_side, pad_top, pad_bottom = int(vw * mat), int(vh * mat * 0.92), int(vh * mat)
     auth = "Basic " + base64.b64encode(f"{user}:{password or ''}".encode()).decode() if user else None
 
@@ -200,7 +209,8 @@ def shoot(url, out, *, title=None, subtitle=None, vw=600, vh=800, dsf=2,
             # whose 30s default is too short for a loaded Pi 3B.
             page.set_default_timeout(timeout_ms)
             misses = []
-            page.route("**/birdnet-api.php**", _make_api_handler(small_floor, window_hours, auth, species))
+            page.route("**/birdnet-api.php**", _make_api_handler(small_floor, window_hours, auth, species,
+                                                                   max_species, rarity))
             page.route("**/apt.js*", _make_js_handler(
                 cluster_xbias, cluster_ybias, count_exp, cluster_pad,
                 label_min_px, auth, misses))
@@ -350,6 +360,9 @@ def main():
     ap.add_argument("--bird-names", action="store_true",
                     help="show common names along the birds")
     ap.add_argument("--timeout", type=int, default=45000)
+    ap.add_argument("--max-species", type=int, default=0,
+                    help="draw at most N birds, one of them the rarest visitor (0 = no cap)")
+    ap.add_argument("--rarity", help="JSON {scientific name: days heard} for the rare slot")
     a = ap.parse_args()
     if (a.zip or a.station_id) and not a.bird_weather:
         print("--zip and --station-id only apply with --bird-weather", file=sys.stderr)
@@ -387,6 +400,13 @@ def main():
         print(f"wrote {a.out}")
         return
     # Mic path: screenshot the live AvianVisitors site at --url.
+    rarity = {}
+    if a.rarity:
+        try:
+            with open(a.rarity, encoding="utf-8") as fh:
+                rarity = json.load(fh)
+        except (OSError, ValueError) as e:
+            print(f"rarity file unreadable ({e}); rare slot by confidence only", file=sys.stderr)
     count_exp = a.count_exp if a.count_exp is not None else 0.4
     headline_px = a.headline_px if a.headline_px is not None else 42
     eyebrow_px = a.eyebrow_px if a.eyebrow_px is not None else 18
@@ -397,7 +417,7 @@ def main():
               cluster_ybias=a.cluster_ybias, count_exp=count_exp, cluster_pad=a.cluster_pad,
               small_floor=a.small_floor,
               window_hours=a.window_hours, timeout_ms=a.timeout, user=a.user, password=a.password,
-              bird_names=a.bird_names)
+              bird_names=a.bird_names, max_species=a.max_species, rarity=rarity)
     except Exception as e:
         print(f"shoot failed: {e}", file=sys.stderr)
         sys.exit(1)
